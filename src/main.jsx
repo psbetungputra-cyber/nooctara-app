@@ -1,186 +1,187 @@
-import React, { useMemo, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import {
-  Home, Sparkles, MessageCircle, Mic2, Gamepad2, Wallet,
-  User, Gift, Crown, ShieldCheck, Radio, Gem, Trophy, Heart,
-  Moon, Search, Bell, Zap, Users, Star, Wand2
-} from 'lucide-react';
-import './styles.css';
+import React, { useMemo, useState } from "react";
+import ReactDOM from "react-dom/client";
+import "./styles.css";
 
-const tabs = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'match', label: 'Match', icon: Sparkles },
-  { id: 'chat', label: 'Chat', icon: MessageCircle },
-  { id: 'room', label: 'Room', icon: Mic2 },
-  { id: 'games', label: 'Games', icon: Gamepad2 },
-  { id: 'wallet', label: 'Wallet', icon: Wallet },
-  { id: 'profile', label: 'Profile', icon: User },
-];
-
-const people = [
-  { name: 'Naya', vibe: 'Night Talk', online: true, score: '96%' },
-  { name: 'Zean', vibe: 'Gamer', online: true, score: '91%' },
-  { name: 'Mika', vibe: 'Music', online: false, score: '88%' },
+const moods = ["Deep Talk", "Random", "Music", "Gamer", "Healing"];
+const quickActions = [
+  { icon: "✦", label: "Vibe Match", desc: "Cari vibe cocok" },
+  { icon: "🎙", label: "Join Room", desc: "Room aktif" },
+  { icon: "🎮", label: "Play Game", desc: "Earn coins" },
+  { icon: "◈", label: "Reward", desc: "Claim harian" }
 ];
 
 const rooms = [
-  { title: 'Chill Vibes Room', users: '1.2K', type: 'Voice', icon: Mic2 },
-  { title: 'Karaoke Party', users: '804', type: 'Live', icon: Radio },
-  { title: 'Deep Talk Midnight', users: '559', type: 'Safe', icon: Moon },
+  { icon: "🌙", name: "Midnight Chill", type: "Voice Room", online: "1.2K", accent: "violet" },
+  { icon: "🎧", name: "Music Lounge", type: "Live Room", online: "864", accent: "cyan" },
+  { icon: "💬", name: "Deep Talk Safe", type: "Comfort Room", online: "527", accent: "pink" },
+  { icon: "🎮", name: "Game & Laugh", type: "Mini Party", online: "413", accent: "green" }
 ];
 
-const games = [
-  { title: 'Truth or Dare', reward: '+50 coin', desc: 'Main bareng teman baru.' },
-  { title: 'Quiz Vibes', reward: '+40 coin', desc: 'Uji pengetahuan santai.' },
-  { title: 'Duo Challenge', reward: '+60 coin', desc: 'Cocokkan vibe berdua.' },
+const people = [
+  { name: "Naya", vibe: "Night Talk", status: "Online", level: 12, avatar: "N", tone: "pink" },
+  { name: "Zean", vibe: "Gamer", status: "Online", level: 9, avatar: "Z", tone: "cyan" },
+  { name: "Mika", vibe: "Music", status: "Live", level: 18, avatar: "M", tone: "violet" }
 ];
 
-const gifts = [
-  { name: 'Heart', price: 20, emoji: '💜' },
-  { name: 'Rose', price: 60, emoji: '🌹' },
-  { name: 'Galaxy', price: 600, emoji: '🌌' },
-  { name: 'Dragon', price: 1500, emoji: '🐉' },
+const chats = [
+  { name: "Naya", message: "Malam ini join room deep talk?", time: "2m", unread: 2, avatar: "N" },
+  { name: "Raka", message: "GG game tadi wkwk", time: "18m", unread: 0, avatar: "R" },
+  { name: "Mika", message: "Karaoke room mulai jam 22.00", time: "1h", unread: 1, avatar: "M" }
 ];
 
-function LogoMark() {
-  return (
-    <div className="logoMark" aria-label="Nooctara logo">
-      <div className="moonArc" />
-      <div className="chatOrb"><span /><span /></div>
-      <div className="starOne">✦</div>
-    </div>
-  );
-}
+const navItems = [
+  { key: "home", label: "Home", icon: "⌂" },
+  { key: "match", label: "Match", icon: "✦" },
+  { key: "chat", label: "Chat", icon: "○" },
+  { key: "room", label: "Room", icon: "🎙" },
+  { key: "profile", label: "Profile", icon: "◉" }
+];
 
 function App() {
-  const [active, setActive] = useState('home');
-  const ActiveIcon = useMemo(() => tabs.find(t => t.id === active)?.icon || Home, [active]);
+  const [activeTab, setActiveTab] = useState("home");
+  const title = useMemo(() => navItems.find((item) => item.key === activeTab)?.label || "Home", [activeTab]);
 
   return (
-    <main className="appShell">
-      <section className="phoneFrame">
-        <header className="topbar">
-          <div className="brandRow">
-            <LogoMark />
-            <div>
-              <h1>Nooctara</h1>
-              <p>Find Your Night Vibe</p>
-            </div>
-          </div>
-          <div className="topActions">
-            <Search size={18} />
-            <Bell size={18} />
-          </div>
-        </header>
-
-        <section className="contentArea">
-          <div className="pageTitle"><ActiveIcon size={18} /> {tabs.find(t => t.id === active)?.label}</div>
-          {active === 'home' && <HomePage />}
-          {active === 'match' && <MatchPage />}
-          {active === 'chat' && <ChatPage />}
-          {active === 'room' && <RoomPage />}
-          {active === 'games' && <GamesPage />}
-          {active === 'wallet' && <WalletPage />}
-          {active === 'profile' && <ProfilePage />}
-        </section>
-
-        <nav className="bottomNav">
-          {tabs.map(({ id, label, icon: Icon }) => (
-            <button key={id} className={active === id ? 'active' : ''} onClick={() => setActive(id)}>
-              <Icon size={18} />
-              <span>{label}</span>
-            </button>
-          ))}
-        </nav>
+    <main className="phone-app">
+      <div className="ambient ambient-one" />
+      <div className="ambient ambient-two" />
+      <AppHeader title={title} />
+      <section className="screen">
+        {activeTab === "home" && <HomeScreen />}
+        {activeTab === "match" && <MatchScreen />}
+        {activeTab === "chat" && <ChatScreen />}
+        {activeTab === "room" && <RoomScreen />}
+        {activeTab === "profile" && <ProfileScreen />}
       </section>
-
-      <aside className="desktopPanel">
-        <div className="heroCard">
-          <LogoMark />
-          <h2>Nooctara Foundation V1</h2>
-          <p>Kerangka social comfort app: chat, vibe match, voice room, mini games, wallet, reward, creator hub, dan profile prestige.</p>
-        </div>
-        <div className="gridStats">
-          <InfoCard icon={Gift} title="Gift Economy" text="Coin untuk gift, border, room effect, boost, sticker, dan mini game bonus." />
-          <InfoCard icon={Gem} title="Creator Reward" text="Host dapat diamond dari gift paid coin, payout aman dengan verified creator." />
-          <InfoCard icon={ShieldCheck} title="Safe Community" text="Report, block, anti-spam, moderation, dan safety rules sejak awal." />
-          <InfoCard icon={Crown} title="VIP Upgrade" text="VIP sebagai enhancement, bukan pemaksaan untuk chat dasar." />
-        </div>
-        <div className="assetPreview">
-          <img src="/assets/nooctara-logo-board.png" alt="Nooctara logo board" />
-        </div>
-      </aside>
+      <BottomNav activeTab={activeTab} onChange={setActiveTab} />
     </main>
   );
 }
 
-function InfoCard({ icon: Icon, title, text }) {
-  return <div className="infoCard"><Icon size={20}/><h3>{title}</h3><p>{text}</p></div>;
+function AppHeader({ title }) {
+  return (
+    <header className="app-header">
+      <div className="brand-mini">
+        <div className="logo-mini"><span /></div>
+        <div>
+          <h1>Nooctara</h1>
+          <p>{title === "Home" ? "Find Your Night Vibe" : title}</p>
+        </div>
+      </div>
+      <div className="header-actions">
+        <button className="coin-pill" aria-label="Coin balance"><span>🪙</span>1,500</button>
+        <button className="icon-button" aria-label="Notifications">⌁</button>
+      </div>
+    </header>
+  );
 }
 
-function HomePage() {
-  return <>
-    <div className="welcomeCard">
-      <div><p>Good Night, Alex 🌙</p><h2>Temukan vibe baru malam ini.</h2></div>
-      <button>Mulai</button>
+function HomeScreen() {
+  return (
+    <div className="page-stack">
+      <section className="tonight-card">
+        <div className="card-glow" />
+        <p className="eyebrow">Tonight Vibe</p>
+        <h2>Lagi pengen vibe apa malam ini?</h2>
+        <div className="mood-row">
+          {moods.map((mood, index) => <button className={index === 0 ? "mood-chip active" : "mood-chip"} key={mood}>{mood}</button>)}
+        </div>
+      </section>
+
+      <section className="quick-grid">
+        {quickActions.map((action) => (
+          <button className="quick-card" key={action.label}>
+            <span>{action.icon}</span><strong>{action.label}</strong><small>{action.desc}</small>
+          </button>
+        ))}
+      </section>
+
+      <SectionHeader title="Live Now" action="See all" />
+      <div className="horizontal-scroll">{rooms.map((room) => <RoomCard room={room} key={room.name} />)}</div>
+
+      <SectionHeader title="People Near Your Vibe" action="Refresh" />
+      <div className="people-row">{people.map((person) => <PersonCard person={person} key={person.name} />)}</div>
+
+      <section className="split-cards">
+        <article className="feature-card"><p>Mini Games</p><h3>Truth or Dare malam ini</h3><span>Earn up to 120 coin</span><button>Play</button></article>
+        <article className="feature-card reward"><p>Daily Reward</p><h3>Claim 50 coin</h3><span>Streak day 3</span><button>Claim</button></article>
+      </section>
+
+      <section className="host-spotlight">
+        <div className="host-avatar">M</div>
+        <div><p>Top Host Tonight</p><h3>Mika sedang live di Music Lounge</h3><span>427 supporter • Karaoke vibe</span></div>
+        <button>Join</button>
+      </section>
     </div>
-    <h3 className="sectionTitle">Live Spotlight</h3>
-    <div className="roomList">{rooms.map((r) => <RoomMini key={r.title} {...r} />)}</div>
-    <h3 className="sectionTitle">Recommended for you</h3>
-    <div className="peopleGrid">{people.map(p => <PersonCard key={p.name} {...p} />)}</div>
-  </>;
+  );
 }
 
-function MatchPage() {
-  const vibes = ['Night Talk', 'Healing', 'Random Chat', 'Gamer', 'Music', 'Deep Talk', 'Funny People', 'Introvert'];
-  return <>
-    <div className="matchHero"><Wand2 /><h2>Pilih Vibe Kamu</h2><p>AI nanti akan bantu cari teman yang cocok.</p></div>
-    <div className="vibeGrid">{vibes.map(v => <button key={v}>{v}</button>)}</div>
-    <button className="primaryBtn">Mulai Match ✨</button>
-  </>;
+function MatchScreen() {
+  return (
+    <div className="page-stack">
+      <section className="match-hero"><p className="eyebrow">Vibe Match</p><h2>Match berdasarkan mood, bukan cuma foto.</h2><button>Start Matching</button></section>
+      <div className="filter-cloud">{["Night Talk", "Introvert", "Funny", "Music", "Gamer", "Healing", "Random"].map((tag) => <button key={tag}>{tag}</button>)}</div>
+      <div className="match-list">
+        {people.map((person) => (
+          <article className="match-card" key={person.name}>
+            <div className={`profile-orb ${person.tone}`}>{person.avatar}</div>
+            <div><h3>{person.name}</h3><p>{person.vibe} • Level {person.level}</p><span>{person.status}</span></div>
+            <button>Say Hi</button>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
 }
 
-function ChatPage() {
-  return <div className="chatMock">
-    <div className="chatHeader"><div className="avatar">N</div><div><h3>Naya</h3><p>Online • Night Talk</p></div></div>
-    <div className="bubble left">Hai! Kamu suka dengerin lagu genre apa?</div>
-    <div className="bubble right">Aku suka lo-fi sama indie, kamu?</div>
-    <div className="bubble left">Wih sama dong 😄</div>
-    <div className="composer"><span>Type a message...</span><Gift size={18}/></div>
-  </div>;
+function ChatScreen() {
+  return (
+    <div className="page-stack">
+      <section className="search-card"><span>⌕</span><input placeholder="Search chat, room, or vibe" /></section>
+      <section className="chat-list">
+        {chats.map((chat) => (
+          <article className="chat-item" key={chat.name}>
+            <div className="chat-avatar">{chat.avatar}</div>
+            <div><h3>{chat.name}</h3><p>{chat.message}</p></div>
+            <aside><span>{chat.time}</span>{chat.unread > 0 && <strong>{chat.unread}</strong>}</aside>
+          </article>
+        ))}
+      </section>
+      <section className="ai-helper"><div><p>AI Ice Breaker</p><h3>Bantu mulai obrolan tanpa awkward.</h3></div><button>Try</button></section>
+    </div>
+  );
 }
 
-function RoomPage() {
-  return <>
-    <div className="liveCard"><Radio /><h2>Chill Vibes Room</h2><p>Host, speaker, gift, room effect, dan ranking supporter.</p></div>
-    <div className="speakerGrid">{['Host','Mika','Zean','Naya','Raka','Lia'].map(x => <div key={x}><div className="avatar">{x[0]}</div><span>{x}</span></div>)}</div>
-    <div className="giftStrip">{gifts.map(g => <button key={g.name}>{g.emoji} {g.price}</button>)}</div>
-  </>;
+function RoomScreen() {
+  return (
+    <div className="page-stack">
+      <section className="room-hero"><h2>Rooms</h2><p>Voice, live, games, dan comfort room dalam satu tempat.</p></section>
+      <div className="room-category-row">{["All", "Voice", "Live", "Game", "Safe"].map((item, index) => <button className={index === 0 ? "active" : ""} key={item}>{item}</button>)}</div>
+      <div className="room-grid-full">{rooms.map((room) => <RoomWideCard room={room} key={room.name} />)}</div>
+    </div>
+  );
 }
 
-function GamesPage() {
-  return <div className="gameList">{games.map(g => <div className="gameCard" key={g.title}><Gamepad2 /><div><h3>{g.title}</h3><p>{g.desc}</p></div><strong>{g.reward}</strong></div>)}</div>;
+function ProfileScreen() {
+  return (
+    <div className="page-stack">
+      <section className="profile-card">
+        <div className="profile-main-avatar">A</div><h2>Alex Noct</h2><p>Night Walker • Level 12</p>
+        <div className="profile-stats"><span><strong>1,500</strong>Coin</span><span><strong>240</strong>Diamond</span><span><strong>7</strong>Badges</span></div>
+      </section>
+      <section className="profile-menu">
+        {[["◈", "Wallet & Top Up", "Coin, diamond, history"], ["✦", "Reward Center", "Daily mission & streak"], ["♛", "VIP Nooctara", "Glow, boost, premium tools"], ["🎙", "Creator Hub", "Host dashboard & gift stats"], ["⚙", "Settings & Safety", "Privacy, report, block"]].map(([icon, title, desc]) => (
+          <button className="profile-row" key={title}><span>{icon}</span><div><strong>{title}</strong><small>{desc}</small></div><em>›</em></button>
+        ))}
+      </section>
+    </div>
+  );
 }
 
-function WalletPage() {
-  return <>
-    <div className="walletCard"><div><p>My Wallet</p><h2>1,500 Coin</h2></div><div><p>Diamond</p><h2>620</h2></div></div>
-    <div className="actionGrid"><button>Top Up</button><button>Misi Harian</button><button>Reward</button><button>Creator Hub</button></div>
-    <h3 className="sectionTitle">Paket Top Up</h3>
-    <div className="priceList">{['Rp25K • 1.500', 'Rp50K • 3.300', 'Rp100K • 7.000'].map(x => <button key={x}>{x}</button>)}</div>
-  </>;
-}
+function SectionHeader({ title, action }) { return <div className="section-header"><h3>{title}</h3><button>{action}</button></div>; }
+function RoomCard({ room }) { return <article className={`room-card ${room.accent}`}><div className="room-symbol">{room.icon}</div><p>{room.type}</p><h3>{room.name}</h3><span>🎙 {room.online} online</span><button>Join</button></article>; }
+function RoomWideCard({ room }) { return <article className="room-wide-card"><div className={`room-wide-icon ${room.accent}`}>{room.icon}</div><div><h3>{room.name}</h3><p>{room.type} • {room.online} online</p></div><button>Join</button></article>; }
+function PersonCard({ person }) { return <article className="person-card"><div className={`profile-orb ${person.tone}`}>{person.avatar}</div><h3>{person.name}</h3><p>{person.vibe}</p><span>{person.status}</span><button>Say Hi</button></article>; }
+function BottomNav({ activeTab, onChange }) { return <nav className="bottom-nav" aria-label="Main navigation">{navItems.map((item) => <button className={activeTab === item.key ? "active" : ""} key={item.key} onClick={() => onChange(item.key)}><span>{item.icon}</span><small>{item.label}</small></button>)}</nav>; }
 
-function ProfilePage() {
-  return <div className="profileCard"><div className="bigAvatar">A</div><h2>Alex</h2><p>Level 18 • Night Person • Indonesia</p><div className="badgeRow"><span>🏆 Top Listener</span><span>💎 VIP Preview</span><span>🌙 Night Vibe</span></div><button className="primaryBtn">Edit Profile</button></div>;
-}
-
-function RoomMini({ title, users, type, icon: Icon }) {
-  return <div className="roomMini"><Icon size={18}/><div><h4>{title}</h4><p>{type} • {users}</p></div></div>;
-}
-
-function PersonCard({ name, vibe, online, score }) {
-  return <div className="personCard"><div className="avatar">{name[0]}</div><h4>{name}</h4><p>{vibe}</p><span>{online ? 'Online' : 'Away'} • {score}</span></div>;
-}
-
-createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<React.StrictMode><App /></React.StrictMode>);
