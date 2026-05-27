@@ -40,3 +40,59 @@
     bottom: auto;
   }
 }
+
+/* Nooctara Interaction Polish V2.2 */
+.story {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.mini-panel button {
+  margin-top: 10px;
+  border: 1px solid rgba(61, 220, 255, 0.21);
+  border-radius: 13px;
+  color: white;
+  background: rgba(61, 220, 255, 0.13);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.utility-sheet .reward-icon {
+  margin-bottom: 10px;
+}
+
+.utility-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-top: 16px;
+}
+
+.utility-item {
+  border: 1px solid var(--stroke);
+  border-radius: 18px;
+  padding: 10px 7px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.utility-item strong {
+  display: block;
+  color: white;
+  font-size: 12px;
+}
+
+.utility-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10.5px;
+}
+
+@media (max-width: 372px) {
+  .utility-grid {
+    grid-template-columns: 1fr;
+  }
+}
